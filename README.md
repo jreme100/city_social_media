@@ -1,4 +1,4 @@
-city_social_media
-=================
-
-Aggregating social media use by cities and their citizens
+#City Social Media
+##Aggrecation Study
+###John Remensperger
+###Michael McCormick
