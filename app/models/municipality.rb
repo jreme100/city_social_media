@@ -1,0 +1,12 @@
+class Municipality < ActiveRecord::Base
+  attr_accessible :geographic_area,
+                  :state,
+                  :url,
+                  :population_estimate,
+                  :region,
+                  :size,
+                  :facebook,
+                  :twitter,
+                  :multiple_accounts,
+                  :multiple_account_notes
+end
