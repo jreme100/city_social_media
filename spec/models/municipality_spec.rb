@@ -16,5 +16,6 @@ describe Municipality do
 
   context 'RELATIONS' do
     it { should respond_to(:facebook_page) }
+    it { should respond_to(:twitter_page) }
   end
 end

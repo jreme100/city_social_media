@@ -11,4 +11,5 @@ class Municipality < ActiveRecord::Base
                   :multiple_account_notes
 
   has_one :facebook_page
+  has_one :twitter_page
 end
