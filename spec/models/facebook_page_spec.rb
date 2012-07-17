@@ -17,5 +17,6 @@ describe FacebookPage do
 
   context 'RELATIONS' do
     it { should respond_to(:municipality) }
+    it { should respond_to(:posts) }
   end
 end

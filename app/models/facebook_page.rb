@@ -12,4 +12,5 @@ class FacebookPage < ActiveRecord::Base
                   :recommends_count
 
   belongs_to :municipality
+  has_many   :posts, class_name: 'FacebookPost'
 end
