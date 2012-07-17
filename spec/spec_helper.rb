@@ -12,7 +12,6 @@ Spork.prefork do
 
   RSpec.configure do |config|
     DatabaseCleaner.strategy = :deletion
-    config.extend SubdomainHelpers
     config.fixture_path = %Q(#{::Rails.root}/spec/fixtures)
     config.use_transactional_fixtures = true
     config.infer_base_class_for_anonymous_controllers = false
