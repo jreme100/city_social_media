@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120717032339) do
+ActiveRecord::Schema.define(:version => 20120719022916) do
 
   create_table "facebook_pages", :force => true do |t|
     t.integer  "municipality_id"
@@ -19,13 +19,10 @@ ActiveRecord::Schema.define(:version => 20120717032339) do
     t.string   "url"
     t.string   "name"
     t.integer  "likes"
-    t.integer  "liked"
     t.integer  "checkins"
     t.integer  "were_here_count"
     t.integer  "talking_about_count"
     t.boolean  "can_post",                         :default => false
-    t.boolean  "recommends",                       :default => false
-    t.integer  "recommends_count"
     t.datetime "created_at",                                          :null => false
     t.datetime "updated_at",                                          :null => false
   end
