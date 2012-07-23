@@ -29,7 +29,52 @@ describe FacebookPage do
   end
 
   context 'INSTANCE METHODS' do
+    before { FacebookPage.any_instance.stub(:enqueue_facebook_page) }
 
+    describe '#get_facebook_graph_data' do
+      use_vcr_cassette
+      subject { FacebookPage.create(facebook_id: 175471555835011).get_facebook_graph_data }
+
+      it 'raises a NoFacebookID when on is missing' do
+        expect { FacebookPage.new.get_facebook_graph_data }.to raise_error(FacebookPage::NoFacebookID)
+      end
+
+      it 'sets the url' do
+        #  link: "http://www.facebook.com/AllentownPA"
+        subject.url.should eql('http://www.facebook.com/AllentownPA')
+      end
+
+      it 'sets the name' do
+        #  name: "Allentown Pennsylvania"
+        subject.name.should eql('Allentown Pennsylvania')
+      end
+
+      it 'sets the likes' do
+        #  likes: 6616
+        subject.likes.should be > 6615
+      end
+
+      it 'sets the checkins' do
+        #  checkins: 266
+        subject.checkins.should be > 265
+      end
+
+      it 'sets the were_here_count' do
+        #  were_here_count: 1280
+        subject.were_here_count.should be > 1275
+      end
+
+      it 'sets the talking_about_count' do
+        #  talking_about_count: 110
+        subject.talking_about_count.should be > 100
+      end
+
+      it 'sets the can_post' do
+        pending 'must authenticate as a user to see the can_post setting.'
+        #  can_post: true
+        subject.can_post?.should be_true
+      end
+    end
   end
 
   context 'CLASS METHODS' do
@@ -44,14 +89,10 @@ describe FacebookPage do
 
 end
 
-#AllentownPA?fields=name,link,can_post,likes,were_here_count,talking_about_count,checkins
-#{
-#  "name": "Allentown Pennsylvania",
-#  "link": "http://www.facebook.com/AllentownPA",
-#  "can_post": true,
-#"likes": 6616,
-#  "were_here_count": 1280,
-#  "talking_about_count": 110,
-#  "checkins": 266,
+
+
+
+
+
 #  "id": "175471555835011"
 #}

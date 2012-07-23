@@ -1,0 +1,1 @@
+::FB = Koala::Facebook::API.new(ENV['CITY_SOCIAL_MEDIA_FB_T'])
