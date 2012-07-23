@@ -27,6 +27,7 @@ group :development, :test do
   gem 'guard-spork'
   gem 'heroku', '~> 2.28.7'
   gem 'timecop'
+  gem 'awesome_print'
 end
 
 group :test do
