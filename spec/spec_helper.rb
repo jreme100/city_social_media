@@ -20,6 +20,11 @@ Spork.prefork do
       ActionMailer::Base.deliveries.clear
     end
   end
+
+  VCR.configure do |config|
+    config.cassette_library_dir = 'spec/fixtures/vcr'
+    config.hook_into :webmock
+  end
 end
 
 Spork.each_run do

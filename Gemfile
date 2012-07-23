@@ -30,6 +30,8 @@ group :development, :test do
 end
 
 group :test do
+  gem 'vcr'
+  gem 'webmock'
   gem 'cucumber-rails', require: false
   gem 'capybara-webkit'
   gem 'database_cleaner'
