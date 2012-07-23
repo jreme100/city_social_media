@@ -18,49 +18,30 @@ describe FacebookPage do
   end
 
   context 'LIFECYCLE' do
-    describe 'before_create' do
-      describe '#facebook_graph_data' do
-        subject { FacebookPage.create }
-
-        it 'sets the facebook_id' do
-          subject.facebook_id.should_not
+    describe 'after_create' do
+      describe '#enqueue' do
+        it 'places the facebook_page in the harvesting queue' do
+          Resque.should_receive(:enqueue).with(FacebookPage, anything)
+          FacebookPage.create
         end
-
-        it 'sets the url' do
-
-        end
-
-        it 'sets the name' do
-
-        end
-
-        it 'sets the likes' do
-
-        end
-
-        it 'sets the checkins' do
-
-        end
-
-        it 'sets the were_here_count' do
-
-        end
-
-        it 'sets the talking_about_count' do
-
-        end
-
-        it 'sets the can_post' do
-
-        end
-
-        it 'creates facebook_posts if they are available' do
-
-        end
-
       end
     end
   end
+
+  context 'INSTANCE METHODS' do
+
+  end
+
+  context 'CLASS METHODS' do
+    describe 'perform' do
+      it 'finds the instance and calls get_facebook_graph_data on it' do
+        FacebookPage.any_instance.should_receive(:get_facebook_graph_data)
+        FacebookPage.any_instance.stub(:enqueue_facebook_page)
+        FacebookPage.perform(FacebookPage.create.id)
+      end
+    end
+  end
+
 end
 
 #AllentownPA?fields=name,link,can_post,likes,were_here_count,talking_about_count,checkins
