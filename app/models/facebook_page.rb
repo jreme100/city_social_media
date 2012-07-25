@@ -1,8 +1,10 @@
 class FacebookPage < ActiveRecord::Base
   class NoFacebookID < StandardError; end
 
-  attr_accessible :facebook_id,
-                  :url,
+  attr_accessible :fb_object_id,
+                  :link,
+                  :website,
+                  :category,
                   :name,
                   :likes,
                   :checkins,
@@ -19,8 +21,8 @@ class FacebookPage < ActiveRecord::Base
   after_create :enqueue_facebook_page
 
   def get_facebook_graph_data
-    raise NoFacebookID unless self.facebook_id
-    set_attributes(::FB.get_object(self.facebook_id).symbolize_keys)
+    raise NoFacebookID unless self.fb_object_id
+    set_attributes(::FB.get_object(self.fb_object_id).symbolize_keys)
     save!
     reload
   end
@@ -39,7 +41,9 @@ private
   end
 
   def set_attributes(attributes)
-    self.url                 = attributes[:link]
+    self.link                = attributes[:link]
+    self.website             = attributes[:website]
+    self.category            = attributes[:category]
     self.name                = attributes[:name]
     self.likes               = attributes[:likes]
     self.checkins            = attributes[:checkins]

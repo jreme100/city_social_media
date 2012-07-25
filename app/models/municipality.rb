@@ -32,9 +32,9 @@ class Municipality < ActiveRecord::Base
 private
   def set_facebook_page_attributes(attributes)
     self.build_facebook_page if self.new_record?
-    self.facebook_page.facebook_id = attributes[:facebook_id]
-    self.facebook_page.url         = attributes[:facebook_url]
-    self.facebook_page.can_post    = attributes[:facebook_can_post]
+    self.facebook_page.fb_object_id = attributes[:fb_object_id]
+    self.facebook_page.link         = attributes[:facebook_url]
+    self.facebook_page.can_post     = attributes[:facebook_can_post]
   end
 
   def set_twitter_page_attributes(attributes)

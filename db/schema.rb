@@ -11,12 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120723071424) do
+ActiveRecord::Schema.define(:version => 20120725233247) do
 
   create_table "facebook_pages", :force => true do |t|
     t.integer  "municipality_id"
-    t.integer  "facebook_id",         :limit => 8
-    t.string   "url"
+    t.integer  "fb_object_id",        :limit => 8
+    t.string   "link"
     t.string   "name"
     t.integer  "likes"
     t.integer  "checkins"
@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(:version => 20120723071424) do
     t.boolean  "can_post",                         :default => false
     t.datetime "created_at",                                          :null => false
     t.datetime "updated_at",                                          :null => false
+    t.string   "category"
+    t.string   "website"
   end
 
   create_table "facebook_posts", :force => true do |t|
@@ -33,12 +35,23 @@ ActiveRecord::Schema.define(:version => 20120723071424) do
     t.integer  "likes"
     t.integer  "shares"
     t.string   "from"
-    t.text     "body"
-    t.datetime "fb_created_at"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.integer  "fb_object_id",     :limit => 8
-    t.string   "fb_url"
+    t.string   "to"
+    t.string   "message"
+    t.string   "picture"
+    t.string   "link"
+    t.string   "name"
+    t.string   "caption"
+    t.string   "description"
+    t.string   "source"
+    t.string   "icon"
+    t.string   "type"
+    t.string   "story"
+    t.integer  "application"
+    t.datetime "created_time"
+    t.datetime "updated_time"
   end
 
   create_table "municipalities", :force => true do |t|

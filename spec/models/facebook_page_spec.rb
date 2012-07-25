@@ -2,8 +2,10 @@ require 'spec_helper'
 
 describe FacebookPage do
   context 'ATTRIBUTES' do
-    it { should respond_to(:facebook_id) }
-    it { should respond_to(:url) }
+    it { should respond_to(:fb_object_id) }
+    it { should respond_to(:link) }
+    it { should respond_to(:website) }
+    it { should respond_to(:category) }
     it { should respond_to(:name) }
     it { should respond_to(:likes) }
     it { should respond_to(:checkins) }
@@ -33,15 +35,25 @@ describe FacebookPage do
 
     describe '#get_facebook_graph_data' do
       use_vcr_cassette
-      subject { FacebookPage.create(facebook_id: 175471555835011).get_facebook_graph_data }
+      subject { FacebookPage.create(fb_object_id: 175471555835011).get_facebook_graph_data }
 
       it 'raises a NoFacebookID when on is missing' do
         expect { FacebookPage.new.get_facebook_graph_data }.to raise_error(FacebookPage::NoFacebookID)
       end
 
-      it 'sets the url' do
+      it 'sets the link' do
         #  link: "http://www.facebook.com/AllentownPA"
-        subject.url.should eql('http://www.facebook.com/AllentownPA')
+        subject.link.should eql('http://www.facebook.com/AllentownPA')
+      end
+
+      it 'sets the website' do
+        #  website: "www.allentownpa.gov"
+        subject.website.should eql('www.allentownpa.gov')
+      end
+
+      it 'sets the category' do
+        #  categoty: "Government organization"
+        subject.category.should eql('Government organization')
       end
 
       it 'sets the name' do

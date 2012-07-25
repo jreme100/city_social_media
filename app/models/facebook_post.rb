@@ -1,11 +1,24 @@
 class FacebookPost < ActiveRecord::Base
-  attr_accessible :likes,
-                  :shares,
+  attr_accessible :fb_object_id,
                   :from,
-                  :body,
-                  :fb_created_at,
-                  :fb_object_id,
-                  :fb_url
+                  :to,
+                  :message,
+                  :picture,
+                  :link,
+                  :name,
+                  :caption,
+                  :description,
+                  :source,
+                  :icon,
+                  :type,
+                  :likes,
+                  :story,
+                  :application,
+                  :created_time,
+                  :updated_time,
+                  :shares,
+                  :created_at,
+                  :updated_at
 
   @queue = :facebook_page
 
@@ -15,18 +28,19 @@ class FacebookPost < ActiveRecord::Base
 
   def full_fbid
     if self.on.present?
-      [ self.on.facebook_page.facebook_id, on.fb_object_id, self.fb_object_id ].compact.join('_')
+      [ self.on.facebook_page.fb_object_id, on.fb_object_id, self.fb_object_id ].compact.join('_')
     else
-      [ self.facebook_page.facebook_id, self.fb_object_id ].compact.join('_')
+      [ self.facebook_page.fb_object_id, self.fb_object_id ].compact.join('_')
     end
   end
 
   class << self
     def get_new
-      FacebookPage.find_each { |page| Resque.enqueue(FacebookPost, page.facebook_id) }
+      FacebookPage.find_each { |page| Resque.enqueue(FacebookPost, page.fb_object_id) }
     end
 
-    def perform(page_id)
+    def perform(page_id = nil)
+      raise FacebookPage::NoFacebookID unless page_id
       ::FB.graph_call( page_id << '/posts' ).each do |fb_post|
         fb_post.symbolize_keys!
         local = FacebookPost.find_by_fb_object_id( fb_post[:id].to_fbid ) || FacebookPost.new
@@ -38,20 +52,31 @@ class FacebookPost < ActiveRecord::Base
 
 private
   def set_attributes(attributes)
-    self.likes         = attributes[:likes].try(:[],:count)
-    self.shares        = attributes[:shares].try(:[],:count)
-    self.from          = attributes[:from].try(:[],:name)
-    self.body          = attributes[:message] || attributes[:description] || attributes[:caption]
-    self.fb_created_at = attributes[:created_time]
     self.fb_object_id  = attributes[:id].to_fbid
-    self.fb_url        = attributes[:link]
+    self.from          = attributes[:from].try(:[],:name)
+    self.to            = attributes[:to].try(:[],:name)
+    self.message       = attributes[:message]
+    self.picture       = attributes[:picture]
+    self.link          = attributes[:link]
+    self.name          = attributes[:name]
+    self.caption       = attributes[:caption]
+    self.description   = attributes[:description]
+    self.source        = attributes[:source]
+    self.icon          = attributes[:icon]
+    self.type          = attributes[:type]
+    self.likes         = attributes[:likes].try(:[],:count)
+    self.story         = attributes[:story]
+    self.application   = attributes[:application].try(:[],:id)
+    self.created_time  = DateTime.iso8601 attributes[:created_time]
+    self.updated_time  = DateTime.iso8601 attributes[:updated_time]
+    self.shares        = attributes[:shares].try(:[],:count)
 
     if attributes[:comments][:data]
       attributes[:comments][:data].each do |comment|
         parent = attributes[:id].split('_').last.to_i
         local_comment = FacebookPost.find_by_on_id( parent ) || FacebookPost.new( on_id: parent )
         self.from          = attributes[:from].try(:[],:name)
-        self.body          = attributes[:message] || attributes[:description] || attributes[:caption]
+        self.body          = attributes[:message]
         self.fb_created_at = attributes[:created_time]
         self.fb_object_id  = attributes[:id].to_fbid
       end
@@ -62,6 +87,6 @@ end
 
 class String
   def to_fbid
-    self..split('_').last.to_i
+    self.split('_').last.to_i
   end
 end

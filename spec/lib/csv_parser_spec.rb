@@ -9,9 +9,13 @@ describe CsvParser do
   end
 
   context '#create_or_update_records' do
-    let(:headers) { %Q(id,geographic_area,state,region,population_estimate,facebook,facebook_id,twitter,twitter_id,multiple_accounts\n) }
+    let(:headers) { %Q(id,geographic_area,state,region,population_estimate,facebook,fb_object_id,twitter,twitter_id,multiple_accounts\n) }
     let(:create_record_test) { headers + %q( ,create_record_test,NV,1,00000) }
     let(:other_field_tests)  { headers + %q( ,create_record_test,NV,1,00000,Y,12345,Y,54321,N) }
+
+    before do
+      FacebookPage.any_instance.stub(:enqueue_facebook_page)
+    end
 
     it 'creates a new record when the first column is blank' do
       cp = CsvParser.new( create_record_test )
@@ -35,7 +39,7 @@ describe CsvParser do
     it 'creates a facebook page' do
       cp = CsvParser.new( other_field_tests )
       cp.create_or_update_records
-      Municipality.last.facebook_page.facebook_id.should eql(12345)
+      Municipality.last.facebook_page.fb_object_id.should eql(12345)
     end
 
     it 'creates a twitter page' do
