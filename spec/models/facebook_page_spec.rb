@@ -88,11 +88,3 @@ describe FacebookPage do
   end
 
 end
-
-
-
-
-
-
-#  "id": "175471555835011"
-#}

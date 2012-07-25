@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120719022916) do
+ActiveRecord::Schema.define(:version => 20120723071424) do
 
   create_table "facebook_pages", :force => true do |t|
     t.integer  "municipality_id"
@@ -35,8 +35,10 @@ ActiveRecord::Schema.define(:version => 20120719022916) do
     t.string   "from"
     t.text     "body"
     t.datetime "fb_created_at"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.integer  "fb_object_id",     :limit => 8
+    t.string   "fb_url"
   end
 
   create_table "municipalities", :force => true do |t|
