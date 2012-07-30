@@ -41,7 +41,9 @@ class FacebookPost < ActiveRecord::Base
 
     def perform(page_id = nil)
       raise FacebookPage::NoFacebookID unless page_id
-      ::FB.graph_call( page_id << '/posts' ).each do |fb_post|
+      p page_id.to_s << '/posts'
+      p ::FB
+      ::FB.graph_call( page_id.to_s << '/posts' ).each do |fb_post|
         fb_post.symbolize_keys!
         local = FacebookPost.find_by_fb_object_id( fb_post[:id].to_fbid ) || FacebookPost.new
         local.set_attributes( fb_post )

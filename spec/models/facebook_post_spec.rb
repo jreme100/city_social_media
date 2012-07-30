@@ -63,7 +63,21 @@ describe FacebookPost do
     end
 
     describe 'perform' do
-      it 'updates the post when a record already exists'
+      use_vcr_cassette
+      let(:page)     { FacebookPage.create fb_object_id: 175471555835011 }
+      let(:old_post) { page.posts.create(fb_object_id: 346871585387899) }
+
+      it 'updates the post when a record already exists and there is updating to be done' do
+        old_post.updated_time = DateTime.iso8601('2012-07-25T17:04:09+0000') - 5.days
+        old_post.save!
+        FacebookPost.perform( page.fb_object_id )
+        old_post.message.should be_present
+      end
+
+      it 'skips update when the facebook update_time is older than our updated_at' do
+
+      end
+
       it 'creates new post when a record does not exist'
 
       it 'creates comments unless they already exist'
