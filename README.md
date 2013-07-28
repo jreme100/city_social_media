@@ -1,4 +1,4 @@
 #City Social Media
-##Aggrecation Study
+##Aggregation Study
 ###John Remensperger
 ###Michael McCormick
